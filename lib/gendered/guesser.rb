@@ -11,9 +11,13 @@ module Gendered
     end
 
     def guess!
-      response = HTTP.get(url)
+      uri = URI.parse(url)
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
+      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      response = http.get(uri)
       case response.code
-      when 200
+      when "200"
 
         guesses = JSON.parse(response.body)
 
